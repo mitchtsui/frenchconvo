@@ -1,10 +1,9 @@
 import { memo } from "react";
-import { weeks } from "../data/weeks/index.js";
-import { sessionKey } from "../data/weeks/index.js";
+import { weeks, sessionKey } from "../data/weeks/index.js";
 
 function weekProgress(weekIndex, week, done) {
-  const total = week.sessions.length;
-  const completed = week.sessions.filter((_, j) => done[sessionKey(weekIndex, j)]).length;
+  const total = week.days.length;
+  const completed = week.days.filter((_, j) => done[sessionKey(weekIndex, j)]).length;
   return { completed, total };
 }
 
@@ -72,7 +71,7 @@ export const WeekList = memo(function WeekList({ done, onSelectWeek }) {
               </div>
             </div>
             <div style={{ display: "flex", gap: 6, marginTop: 8 }}>
-              {week.sessions.map((session, si) => {
+              {week.days.map((day, si) => {
                 const isDone = done[sessionKey(i, si)];
                 return (
                   <div
@@ -91,9 +90,9 @@ export const WeekList = memo(function WeekList({ done, onSelectWeek }) {
                       color: isDone ? "#fff" : "var(--muted)",
                       border: `1.5px solid ${isDone ? week.color : "var(--border)"}`,
                     }}
-                    aria-label={`${session.day}${isDone ? " terminé" : ""}`}
+                    aria-label={`${day}${isDone ? " terminé" : ""}`}
                   >
-                    {session.day.charAt(0)}
+                    {day.charAt(0)}
                   </div>
                 );
               })}

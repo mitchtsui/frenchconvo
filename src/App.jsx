@@ -1,5 +1,6 @@
-import { useCallback, useMemo, useState } from "react";
+import { Suspense, lazy, useCallback, useMemo, useState } from "react";
 import { weeks, sessionKey } from "./data/weeks/index.js";
+import { useWeek } from "./hooks/useWeek.js";
 import { usePersistentState } from "./hooks/usePersistentState.js";
 import { KEYS } from "./lib/storage.js";
 import { addPhrasesToDeck, dueCards } from "./lib/srs.js";
@@ -9,9 +10,30 @@ import { tap } from "./lib/haptics.js";
 import { HomeHeader, WeekHeader } from "./components/Header.jsx";
 import { WeekList } from "./components/WeekList.jsx";
 import { SessionView } from "./components/SessionView.jsx";
-import { DialoguePlayer } from "./components/DialoguePlayer.jsx";
-import { ReviewDeck } from "./components/ReviewDeck.jsx";
 import { Toast } from "./components/Toast.jsx";
+
+const DialoguePlayer = lazy(() =>
+  import("./components/DialoguePlayer.jsx").then((m) => ({ default: m.DialoguePlayer }))
+);
+const ReviewDeck = lazy(() =>
+  import("./components/ReviewDeck.jsx").then((m) => ({ default: m.ReviewDeck }))
+);
+
+function LoadingShell() {
+  return (
+    <div
+      style={{
+        flex: 1,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        color: "var(--muted)",
+      }}
+    >
+      Chargement…
+    </div>
+  );
+}
 
 const DEFAULT_SETTINGS = {
   speed: "normal", // "normal" | "slow"
@@ -25,9 +47,11 @@ export default function App() {
   const [settings, setSettings] = usePersistentState(KEYS.settings, DEFAULT_SETTINGS);
   const [streak, setStreak] = usePersistentState(KEYS.streak, emptyStreak());
   const [deck, setDeck] = usePersistentState(KEYS.srs, {});
+  const [vocab, setVocab] = usePersistentState(KEYS.vocab, {});
 
   const [selectedWeek, setSelectedWeek] = useState(null);
   const [selectedSession, setSelectedSession] = useState(0);
+  const loadedWeek = useWeek(selectedWeek);
   const [view, setView] = useState("home"); // "home" | "week" | "player" | "review"
   const [toast, setToast] = useState("");
 
@@ -50,20 +74,16 @@ export default function App() {
 
   const handleSessionDone = useCallback(
     (key) => {
-      setDone((prev) => {
-        if (prev[key]) return prev;
-        return { ...prev, [key]: true };
-      });
-      // Pull this session's phrases into the SRS deck.
-      const [wIdx, sIdx] = key.split("-").map(Number);
-      const session = weeks[wIdx]?.sessions[sIdx];
+      setDone((prev) => (prev[key] ? prev : { ...prev, [key]: true }));
+      const [, sIdx] = key.split("-").map(Number);
+      const session = loadedWeek?.sessions[sIdx];
       if (session) {
         setDeck((prev) => addPhrasesToDeck(prev, session.phrases));
       }
       setStreak((prev) => recordActivity(prev));
       setToast(`Bravo · ${session?.phrases.length ?? 0} phrases ajoutées à la révision`);
     },
-    [setDone, setDeck, setStreak]
+    [loadedWeek, setDone, setDeck, setStreak]
   );
 
   const openSession = (weekIdx, sessionIdx = 0) => {
@@ -82,13 +102,13 @@ export default function App() {
     } else if (selectedWeek > 0) {
       const prevWeek = weeks[selectedWeek - 1];
       setSelectedWeek(selectedWeek - 1);
-      setSelectedSession(prevWeek.sessions.length - 1);
+      setSelectedSession(prevWeek.days.length - 1);
     }
   };
 
   const onNextSession = () => {
     const week = weeks[selectedWeek];
-    if (selectedSession < week.sessions.length - 1) {
+    if (selectedSession < week.days.length - 1) {
       setSelectedSession((p) => p + 1);
     } else if (selectedWeek < weeks.length - 1) {
       setSelectedWeek((p) => p + 1);
@@ -104,21 +124,32 @@ export default function App() {
   if (view === "review") {
     return (
       <Shell>
-        <ReviewDeck
-          deck={deck}
-          onUpdateDeck={setDeck}
-          onClose={() => setView("home")}
-          baseRate={baseRate}
-        />
+        <Suspense fallback={<LoadingShell />}>
+          <ReviewDeck
+            deck={deck}
+            onUpdateDeck={setDeck}
+            onClose={() => setView("home")}
+            baseRate={baseRate}
+          />
+        </Suspense>
         <Toast message={toast} onDone={() => setToast("")} />
       </Shell>
     );
   }
 
   if (view === "player" && selectedWeek !== null) {
+    if (!loadedWeek) {
+      return (
+        <Shell>
+          <LoadingShell />
+        </Shell>
+      );
+    }
     return (
       <Shell>
+        <Suspense fallback={<LoadingShell />}>
         <DialoguePlayer
+          week={loadedWeek}
           weekIndex={selectedWeek}
           sessionIndex={selectedSession}
           baseRate={baseRate}
@@ -142,12 +173,29 @@ export default function App() {
           onToggleShadow={() => updateSettings({ shadowMode: !settings.shadowMode })}
           onToggleVousMode={() => updateSettings({ vousMode: !settings.vousMode })}
         />
+        </Suspense>
         <Toast message={toast} onDone={() => setToast("")} />
       </Shell>
     );
   }
 
   if (view === "week" && selectedWeek !== null) {
+    if (!loadedWeek) {
+      return (
+        <Shell>
+          <div
+            style={{
+              padding: "calc(20px + var(--safe-top)) 20px 14px",
+              borderBottom: "1px solid var(--border)",
+              flexShrink: 0,
+            }}
+          >
+            <WeekHeader week={weeks[selectedWeek]} onBack={() => setView("home")} />
+          </div>
+          <LoadingShell />
+        </Shell>
+      );
+    }
     return (
       <Shell>
         <div
@@ -160,10 +208,13 @@ export default function App() {
           <WeekHeader week={weeks[selectedWeek]} onBack={() => setView("home")} />
         </div>
         <SessionView
+          week={loadedWeek}
           weekIndex={selectedWeek}
           sessionIndex={selectedSession}
           done={done}
           baseRate={baseRate}
+          vocab={vocab}
+          onMarkVocab={(w, status) => setVocab((prev) => ({ ...prev, [w]: status }))}
           onToggleDone={toggleDone}
           onSelectSession={setSelectedSession}
           onPrevSession={onPrevSession}

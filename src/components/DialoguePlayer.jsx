@@ -1,10 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { weeks, sessionKey } from "../data/weeks/index.js";
+import { sessionKey } from "../data/weeks/index.js";
 import { speakAs, stopAll, loadVoices } from "../lib/tts.js";
 import { getProsody } from "../lib/prosody.js";
 import { tap } from "../lib/haptics.js";
 import { useWakeLock } from "../hooks/useWakeLock.js";
 import { useSwipe } from "../hooks/useSwipe.js";
+import { useMediaSession } from "../hooks/useMediaSession.js";
 import { PlayerHeader } from "./Header.jsx";
 import { PhrasePill } from "./PhrasePill.jsx";
 import { DialogueLine } from "./DialogueLine.jsx";
@@ -18,6 +19,7 @@ function estimateSpeechMs(text) {
 }
 
 export function DialoguePlayer({
+  week,
   weekIndex,
   sessionIndex,
   baseRate,
@@ -35,7 +37,6 @@ export function DialoguePlayer({
   onToggleVousMode,
   done,
 }) {
-  const week = weeks[weekIndex];
   const session = week.sessions[sessionIndex];
   const lines = session.lines;
   const key = sessionKey(weekIndex, sessionIndex);
@@ -140,6 +141,16 @@ export function DialoguePlayer({
     },
     [lines, baseRate, shadowMode, vousMode, waitForUser, done, key, onSessionDone]
   );
+
+  useMediaSession({
+    title: session.title,
+    artist: `Semaine ${week.week} · ${session.day}`,
+    isPlaying,
+    onPlay: () => playFrom(activeIndex >= 0 ? activeIndex : 0),
+    onPause: () => stopAndResetSpeaking(),
+    onPrev: () => onPrevSession?.(),
+    onNext: () => onNextSession?.(),
+  });
 
   // Auto-play the dialogue when the player mounts. We capture playFrom in the
   // dep array so the effect can read the latest closure (fixes the previous

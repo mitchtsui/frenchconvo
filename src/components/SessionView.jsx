@@ -1,6 +1,9 @@
 import { memo } from "react";
-import { weeks, sessionKey } from "../data/weeks/index.js";
+import { sessionKey, weeks as weeksMeta } from "../data/weeks/index.js";
 import { PhrasePill } from "./PhrasePill.jsx";
+import { VocabPanel } from "./VocabPanel.jsx";
+import { ComprehensionQuiz } from "./ComprehensionQuiz.jsx";
+import { questionsFor } from "../data/comprehension.js";
 import { characterColor } from "../lib/characterColor.js";
 import { tap } from "../lib/haptics.js";
 
@@ -10,9 +13,12 @@ function clampSession(week, sessionIndex) {
 }
 
 export const SessionView = memo(function SessionView({
+  week,
   weekIndex,
   sessionIndex,
   done,
+  vocab = {},
+  onMarkVocab,
   onToggleDone,
   onSelectSession,
   onPrevSession,
@@ -20,12 +26,11 @@ export const SessionView = memo(function SessionView({
   onPlay,
   baseRate,
 }) {
-  const week = weeks[weekIndex];
   const session = week.sessions[clampSession(week, sessionIndex)];
   const key = sessionKey(weekIndex, sessionIndex);
   const isDone = !!done[key];
   const isLastInCourse =
-    sessionIndex === week.sessions.length - 1 && weekIndex === weeks.length - 1;
+    sessionIndex === week.sessions.length - 1 && weekIndex === weeksMeta.length - 1;
 
   return (
     <div style={{ flex: 1, overflowY: "auto", padding: "14px 20px calc(28px + var(--safe-bottom))" }}>
@@ -149,6 +154,16 @@ export const SessionView = memo(function SessionView({
       <button className="cta-button" onClick={onPlay}>
         ▶ Lire le dialogue
       </button>
+
+      <VocabPanel
+        session={session}
+        vocab={vocab}
+        baseRate={baseRate}
+        onMarkKnown={(w) => onMarkVocab?.(w, "known")}
+        onMarkLearning={(w) => onMarkVocab?.(w, "learning")}
+      />
+
+      <ComprehensionQuiz questions={questionsFor(weekIndex, sessionIndex)} />
 
       <div
         style={{
