@@ -248,7 +248,99 @@ d:[
 {c:"Vous",fr:"On a très bien mangé, merci ! Bonne soirée !",en:"We ate very well, thanks! Good evening!"},
 ]}
 ]},
-{week:4,title:"À l'hôtel",sub:"Check-in to Check-out",color:"#2C3E6B",sessions:[
+{week:4,title:"Vins et terroirs",sub:"Wine Lover's Week",color:"#722F37",sessions:[
+{day:"Lun",title:"Au bar à vins",focus:"Wine bar tasting",phrases:["Qu'avez-vous au verre ?","Je goûterais bien","Une planche de charcuterie"],
+d:[
+{c:"Narrateur",fr:"Un bar à vins du onzième arrondissement, en début de soirée.",en:"A wine bar in the 11th arrondissement, early evening."},
+{c:"Hugo",fr:"Bonsoir ! Vous prenez un apéritif ?",en:"Good evening! Having an aperitif?"},
+{c:"Vous",fr:"Bonsoir. Qu'est-ce que vous avez au verre ce soir ?",en:"Good evening. What do you have by the glass tonight?"},
+{c:"Hugo",fr:"En blanc, un Sancerre et un Riesling alsacien. En rouge, un Côtes-du-Rhône et un pinot noir de Bourgogne.",en:"In white, a Sancerre and an Alsatian Riesling. In red, a Côtes-du-Rhône and a Burgundy pinot noir."},
+{c:"Vous",fr:"Le pinot noir, il est de quel domaine ?",en:"The pinot noir, what estate is it from?"},
+{c:"Hugo",fr:"Domaine Faiveley, à Mercurey. Très élégant, sur la cerise et le poivre.",en:"Domaine Faiveley, in Mercurey. Very elegant, with cherry and pepper notes."},
+{c:"Vous",fr:"Je goûterais bien avant de choisir.",en:"I'd like to taste before choosing."},
+{c:"Hugo",fr:"Bien sûr, je vous fais une dégustation.",en:"Of course, let me pour you a tasting."},
+{c:"Vous",fr:"Au nez, c'est très fin. En bouche aussi, beaucoup de fruit.",en:"On the nose, it's very fine. On the palate too, lots of fruit."},
+{c:"Hugo",fr:"Vous avez un bon palais ! Je vous sers un verre ?",en:"You have a good palate! Shall I pour you a glass?"},
+{c:"Vous",fr:"Oui, et une planche de charcuterie pour l'accompagner.",en:"Yes, and a charcuterie board to go with it."},
+{c:"Hugo",fr:"Parfait. Je vous installe en terrasse ?",en:"Perfect. Shall I seat you on the terrace?"},
+{c:"Vous",fr:"Avec plaisir, merci.",en:"Gladly, thank you."},
+]},
+{day:"Mar",title:"Choisir une bouteille",focus:"Wine list & vintages",phrases:["La carte des vins","Le millésime","Quelque chose de plus charpenté"],
+d:[
+{c:"Narrateur",fr:"Au restaurant. Vous étudiez la carte des vins avec Léa.",en:"At the restaurant. You're studying the wine list with Léa."},
+{c:"Léa",fr:"Tu veux qu'on partage une bouteille ce soir ?",en:"Want to share a bottle tonight?"},
+{c:"Vous",fr:"Bonne idée. Plutôt rouge, avec ce qu'on a commandé.",en:"Good idea. Red rather, with what we ordered."},
+{c:"Léa",fr:"Il y a quoi de bien sur la carte ?",en:"What's good on the list?"},
+{c:"Vous",fr:"Un Saint-Émilion deux mille dix-huit à soixante-deux euros, et un Pomerol deux mille seize à quatre-vingt-quinze.",en:"A Saint-Émilion 2018 at sixty-two euros, and a Pomerol 2016 at ninety-five."},
+{c:"Léa",fr:"Demande conseil au sommelier.",en:"Ask the sommelier's advice."},
+{c:"Dominique",fr:"Bonsoir, vous avez choisi ?",en:"Good evening, have you decided?"},
+{c:"Vous",fr:"On hésite. Vous nous conseilleriez quelque chose de plus charpenté que le Saint-Émilion ?",en:"We're hesitating. Could you recommend something fuller-bodied than the Saint-Émilion?"},
+{c:"Dominique",fr:"J'ai un Cahors deux mille dix-sept, du Clos Triguedina. Belle structure, beaucoup de fruit noir.",en:"I have a Cahors 2017, from Clos Triguedina. Nice structure, lots of black fruit."},
+{c:"Vous",fr:"C'est un beau millésime ?",en:"Is it a good vintage?"},
+{c:"Dominique",fr:"Excellent, et bien ouvert maintenant. Soixante-cinq euros la bouteille.",en:"Excellent, and well open now. Sixty-five euros a bottle."},
+{c:"Vous",fr:"Parfait. On le prend.",en:"Perfect. We'll take it."},
+{c:"Dominique",fr:"Je vais le carafer un peu pour qu'il s'aère.",en:"I'll decant it briefly so it can breathe."},
+{c:"Vous",fr:"Merci, on vous fait confiance.",en:"Thanks, we trust you."},
+]},
+{day:"Mer",title:"Accords mets-vins",focus:"Sommelier pairings",phrases:["Un accord parfait","Les tannins","Je vous fais confiance"],
+d:[
+{c:"Narrateur",fr:"Dans un restaurant gastronomique. Le sommelier propose les accords.",en:"In a gastronomic restaurant. The sommelier suggests pairings."},
+{c:"Dominique",fr:"Bonsoir ! Avez-vous choisi vos plats ?",en:"Good evening! Have you chosen your dishes?"},
+{c:"Vous",fr:"Oui. En entrée, le foie gras pour moi et les Saint-Jacques pour madame. Ensuite, l'agneau et le pigeon.",en:"Yes. To start, foie gras for me and scallops for madam. Then lamb and pigeon."},
+{c:"Dominique",fr:"Souhaitez-vous un accord mets-vins au verre ?",en:"Would you like a wine pairing by the glass?"},
+{c:"Vous",fr:"Volontiers. Qu'est-ce que vous proposez ?",en:"Gladly. What do you suggest?"},
+{c:"Dominique",fr:"Sur le foie gras, un Jurançon moelleux : sucré, mais avec une belle acidité.",en:"With the foie gras, a sweet Jurançon: sweet, but with lovely acidity."},
+{c:"Vous",fr:"J'évite les Sauternes, je les trouve parfois trop lourds.",en:"I avoid Sauternes, I find them sometimes too heavy."},
+{c:"Dominique",fr:"Le Jurançon est plus vif. Sur les Saint-Jacques, un Meursault, gras et beurré.",en:"The Jurançon is livelier. With the scallops, a Meursault, rich and buttery."},
+{c:"Vous",fr:"Et pour le pigeon ?",en:"And for the pigeon?"},
+{c:"Dominique",fr:"Un Volnay, soyeux et délicat. Ça respecte la finesse de la viande.",en:"A Volnay, silky and delicate. It respects the finesse of the meat."},
+{c:"Vous",fr:"Sur l'agneau, un Pauillac peut-être ?",en:"On the lamb, a Pauillac perhaps?"},
+{c:"Dominique",fr:"Excellent réflexe. Un deux mille quinze, les tannins sont fondus.",en:"Excellent instinct. A 2015, the tannins are well integrated."},
+{c:"Vous",fr:"Les tannins ne seront pas trop secs ?",en:"Won't the tannins be too dry?"},
+{c:"Dominique",fr:"Non, sur ce millésime ils sont bien enrobés. Vous me faites confiance ?",en:"No, on this vintage they're well rounded. Do you trust me?"},
+{c:"Vous",fr:"Tout à fait. Quel accord parfait en perspective !",en:"Absolutely. What a perfect pairing in store!"},
+{c:"Dominique",fr:"Je vous prépare ça avec plaisir.",en:"I'll prepare it for you with pleasure."},
+]},
+{day:"Jeu",title:"Le plateau de fromages",focus:"Cheese & wine pairings",phrases:["Un fromage bien fait","Avec quel vin ?","Pas trop fort"],
+d:[
+{c:"Narrateur",fr:"Le serveur amène le chariot de fromages.",en:"The waiter brings the cheese trolley."},
+{c:"Raphaël",fr:"Voilà notre plateau. Côté pâtes molles : brie de Meaux, époisses, Saint-Marcellin.",en:"Here's our board. Soft cheeses: brie de Meaux, époisses, Saint-Marcellin."},
+{c:"Raphaël",fr:"Côté pâtes pressées : comté vingt-quatre mois et beaufort. Et les bleus : roquefort et fourme d'Ambert.",en:"Hard cheeses: comté 24 months and beaufort. And the blues: roquefort and fourme d'Ambert."},
+{c:"Vous",fr:"L'époisses est bien fait ?",en:"Is the époisses well-aged?"},
+{c:"Raphaël",fr:"Très fait, puissant en bouche. Trois semaines en cave.",en:"Very ripe, powerful on the palate. Three weeks in the cellar."},
+{c:"Vous",fr:"Parfait. Je prendrai l'époisses, le comté, et le roquefort.",en:"Perfect. I'll have the époisses, the comté, and the roquefort."},
+{c:"Léa",fr:"Pour moi, le crottin et un peu de brie. Pas trop fait, le brie.",en:"For me, the crottin and a bit of brie. Not too ripe, the brie."},
+{c:"Raphaël",fr:"Une part bien crémeuse pour madame, je m'en occupe.",en:"A nice creamy slice for madam, I'll take care of it."},
+{c:"Dominique",fr:"Avec le roquefort, je vous conseille un verre de Banyuls. Sucré et puissant.",en:"With the roquefort, I recommend a glass of Banyuls. Sweet and powerful."},
+{c:"Vous",fr:"Et avec le chèvre ?",en:"And with the goat cheese?"},
+{c:"Dominique",fr:"Un Sancerre serait classique. Pour le comté, on garde le rouge.",en:"A Sancerre would be classic. For the comté, we keep the red."},
+{c:"Léa",fr:"Banyuls et roquefort, c'est mon accord préféré.",en:"Banyuls and roquefort, that's my favourite pairing."},
+{c:"Vous",fr:"Sucré-salé, c'est magique.",en:"Sweet and savoury, it's magical."},
+{c:"Dominique",fr:"Et un peu de pain de campagne pour aller avec ?",en:"And some country bread to go with it?"},
+{c:"Vous",fr:"Évidemment !",en:"Of course!"},
+]},
+{day:"Ven",title:"Visite d'un domaine",focus:"At the winery",phrases:["Le terroir","Les vendanges","On élève en fût de chêne"],
+d:[
+{c:"Narrateur",fr:"En Bourgogne, vous visitez un petit domaine familial.",en:"In Burgundy, you visit a small family estate."},
+{c:"Camille",fr:"Bonjour, bienvenue au Domaine des Trois Clés ! Vous avez fait bonne route ?",en:"Hello, welcome to Domaine des Trois Clés! Did you have a good trip?"},
+{c:"Vous",fr:"Bonjour ! Oui, la région est magnifique.",en:"Hello! Yes, the region is magnificent."},
+{c:"Camille",fr:"On va d'abord voir les vignes, puis on descendra en cave pour la dégustation.",en:"We'll see the vines first, then go down to the cellar for the tasting."},
+{c:"Vous",fr:"Vous avez combien d'hectares ?",en:"How many hectares do you have?"},
+{c:"Camille",fr:"Douze hectares, principalement pinot noir et chardonnay. C'est notre terroir.",en:"Twelve hectares, mainly pinot noir and chardonnay. It's our terroir."},
+{c:"Vous",fr:"Vous travaillez en bio ?",en:"Do you farm organically?"},
+{c:"Camille",fr:"En biodynamie depuis deux mille douze. C'est exigeant, mais le résultat se sent dans le verre.",en:"In biodynamics since 2012. It's demanding, but you can taste it in the glass."},
+{c:"Vous",fr:"Les vendanges, c'était quand cette année ?",en:"The harvest, when was it this year?"},
+{c:"Camille",fr:"Fin août. Avec le réchauffement, c'est de plus en plus tôt.",en:"End of August. With global warming, it's earlier and earlier."},
+{c:"Camille",fr:"Voici la cave. On élève les blancs douze mois en fût de chêne, les rouges entre quinze et dix-huit.",en:"Here's the cellar. We age the whites twelve months in oak barrels, the reds between fifteen and eighteen."},
+{c:"Vous",fr:"Le bois est neuf ?",en:"Is the oak new?"},
+{c:"Camille",fr:"Trente pour cent neuf, le reste a déjà servi. On cherche l'équilibre, pas le boisé excessif.",en:"Thirty percent new, the rest has been used. We seek balance, not excessive oakiness."},
+{c:"Vous",fr:"Je goûterais bien votre cuvée prestige.",en:"I'd love to try your prestige cuvée."},
+{c:"Camille",fr:"Avec plaisir. C'est un assemblage de nos plus vieilles vignes. À garder dix ans en cave.",en:"With pleasure. It's a blend from our oldest vines. Worth ageing ten years in the cellar."},
+{c:"Vous",fr:"Magnifique ! J'en prendrai trois bouteilles pour ma cave personnelle.",en:"Magnificent! I'll take three bottles for my personal cellar."},
+{c:"Camille",fr:"Excellent choix ! Merci de votre visite, et à bientôt j'espère.",en:"Excellent choice! Thank you for your visit, and see you soon I hope."},
+]}
+]},
+{week:5,title:"À l'hôtel",sub:"Check-in to Check-out",color:"#2C3E6B",sessions:[
 {day:"Lun",title:"J'ai une réservation",focus:"Check-in",phrases:["Réservation au nom de…","Petit-déjeuner inclus ?","Code Wi-Fi ?"],
 d:[
 {c:"Nathalie",fr:"Bonsoir, bienvenue ! Vous avez une réservation ?",en:"Good evening, welcome! Do you have a reservation?"},
@@ -312,7 +404,7 @@ d:[
 {c:"Nathalie",fr:"Encore désolée ! Bonne continuation !",en:"Sorry again! All the best!"},
 ]}
 ]},
-{week:5,title:"Se déplacer",sub:"Getting Around",color:"#6B4226",sessions:[
+{week:6,title:"Se déplacer",sub:"Getting Around",color:"#6B4226",sessions:[
 {day:"Lun",title:"Pour aller à…",focus:"Directions",phrases:["Pour aller à…","C'est loin ?","Cinq minutes à pied"],
 d:[
 {c:"Vous",fr:"Excusez-moi, pour aller au Musée d'Orsay, s'il vous plaît ?",en:"Excuse me, how do I get to the Musée d'Orsay, please?"},
@@ -375,7 +467,7 @@ d:[
 {c:"Youssef",fr:"Au restaurant, rue de Rivoli ? En route !",en:"To the restaurant, rue de Rivoli? Let's go!"},
 ]}
 ]},
-{week:6,title:"Faire les courses",sub:"Shopping & Errands",color:"#4A6741",sessions:[
+{week:7,title:"Faire les courses",sub:"Shopping & Errands",color:"#4A6741",sessions:[
 {day:"Lun",title:"Au marché",focus:"Food market",phrases:["Un kilo de…","C'est mûr ?","Je peux goûter ?"],
 d:[
 {c:"Jean-Pierre",fr:"Les belles tomates ! Deux euros le kilo ! Bonjour monsieur !",en:"Beautiful tomatoes! Two euros a kilo! Hello sir!"},
@@ -443,7 +535,7 @@ d:[
 {c:"Colette",fr:"Bonne fin de journée !",en:"Have a good rest of the day!"},
 ]}
 ]},
-{week:7,title:"Bavarder",sub:"Social Conversations",color:"#7B5EA7",sessions:[
+{week:8,title:"Bavarder",sub:"Social Conversations",color:"#7B5EA7",sessions:[
 {day:"Lun",title:"Tu fais quoi ?",focus:"Work & life",phrases:["Je travaille dans…","Ça te plaît ?","Du coup / En fait"],
 d:[
 {c:"Hélène",fr:"Salut ! Tu fais quoi dans la vie ?",en:"Hi! What do you do for a living?"},
@@ -508,7 +600,7 @@ d:[
 {c:"Vous",fr:"C'était super. À bientôt !",en:"It was great. See you soon!"},
 ]}
 ]},
-{week:8,title:"Tout ensemble",sub:"Full Scenarios",color:"#C4A35A",sessions:[
+{week:9,title:"Tout ensemble",sub:"Full Scenarios",color:"#C4A35A",sessions:[
 {day:"Lun",title:"Premier jour",focus:"Arrival day",phrases:["All Weeks 1-4"],
 d:[
 {c:"Hassan",fr:"Première fois à Paris ?",en:"First time in Paris?"},
@@ -559,15 +651,17 @@ d:[
 {c:"Nicolas",fr:"Pense à Giverny au printemps !",en:"Think about Giverny in spring!"},
 {c:"Vous",fr:"Promis ! À très bientôt !",en:"Promise! See you very soon!"},
 ]},
-{day:"Ven",title:"Le grand final",focus:"Everything combined",phrases:["All 8 weeks"],
+{day:"Ven",title:"Le grand final",focus:"Everything combined",phrases:["All 9 weeks"],
 d:[
-{c:"Narrateur",fr:"Montage final : huit rencontres qui résument votre voyage.",en:"Final montage: eight encounters that sum up your trip."},
+{c:"Narrateur",fr:"Montage final : neuf rencontres qui résument votre voyage.",en:"Final montage: nine encounters that sum up your trip."},
 {c:"Marie",fr:"Enchanté ! Vous venez d'où ?",en:"Nice to meet you! Where are you from?"},
 {c:"Vous",fr:"De Hong Kong. Moi, c'est Mitchell.",en:"From Hong Kong. I'm Mitchell."},
 {c:"Lucas",fr:"Qu'est-ce que je vous sers ?",en:"What can I get you?"},
 {c:"Vous",fr:"Un café crème, en terrasse.",en:"A café crème, on the terrace."},
 {c:"Isabelle",fr:"Pour combien de personnes ?",en:"For how many people?"},
 {c:"Vous",fr:"Deux, à vingt heures, au nom de Mitchell.",en:"Two, at 8pm, under Mitchell."},
+{c:"Dominique",fr:"Vous me faites confiance pour le vin ?",en:"Do you trust me on the wine?"},
+{c:"Vous",fr:"Tout à fait. Quelque chose de charpenté, s'il vous plaît.",en:"Absolutely. Something full-bodied, please."},
 {c:"Nathalie",fr:"La clim ne marche pas ?",en:"The AC isn't working?"},
 {c:"Vous",fr:"Serait-il possible de changer de chambre ?",en:"Would it be possible to change rooms?"},
 {c:"Sylvie",fr:"Le musée ? Tout droit, puis à gauche.",en:"The museum? Straight ahead, then left."},
@@ -576,7 +670,7 @@ d:[
 {c:"Vous",fr:"Le vin, les cafés, et les conversations comme celle-ci.",en:"The wine, the cafés, and conversations like this one."},
 {c:"Nicolas",fr:"Allez, à la prochaine !",en:"See you next time!"},
 {c:"Vous",fr:"Merci pour tout. À très bientôt !",en:"Thanks for everything. See you very soon!"},
-{c:"Narrateur",fr:"Bravo ! Vous avez terminé les huit semaines. Votre français est prêt pour le voyage !",en:"Bravo! You've completed all eight weeks. Your French is ready for travel!"},
+{c:"Narrateur",fr:"Bravo ! Vous avez terminé les neuf semaines. Votre français est prêt pour le voyage !",en:"Bravo! You've completed all nine weeks. Your French is ready for travel!"},
 ]}
 ]}
 ];
@@ -594,6 +688,7 @@ function st(){window.speechSynthesis?.cancel();}
 const CL=["#1B4332","#8B1A1A","#2C3E6B","#6B4226","#7B5EA7","#5C4033","#4A6741","#C4A35A","#D4456A","#2A7B9B"];
 const cm={};let ci=0;
 function cc(n){if(!n)return"var(--muted)";if(n==="Narrateur")return"var(--muted)";if(n==="Vous")return"var(--accent)";if(n==="Annonce SNCF")return"#B91C1C";if(cm[n])return cm[n];cm[n]=CL[ci%CL.length];ci++;return cm[n];}
+const TOT=W.reduce((a,w)=>a+w.sessions.length,0);
 
 export default function App(){
   const[sW,setSW]=useState(null);
@@ -681,10 +776,10 @@ export default function App(){
           </div>
         ):(
           <div>
-            <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:10,fontWeight:600,letterSpacing:".08em",textTransform:"uppercase",color:"var(--muted)",marginBottom:2}}>Cours de français · 8 semaines</div>
+            <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:10,fontWeight:600,letterSpacing:".08em",textTransform:"uppercase",color:"var(--muted)",marginBottom:2}}>Cours de français · {W.length} semaines</div>
             <h1 style={{fontSize:20,fontWeight:700}}>Rafraîchir son français</h1>
-            <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:12,color:"var(--muted)",marginTop:2}}>40 audio dialogues · {td}/40 done</div>
-            <div className="bar" style={{marginTop:8}}><div className="fl" style={{width:`${(td/40)*100}%`,background:"var(--accent)"}}/></div>
+            <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:12,color:"var(--muted)",marginTop:2}}>{TOT} audio dialogues · {td}/{TOT} done</div>
+            <div className="bar" style={{marginTop:8}}><div className="fl" style={{width:`${(td/TOT)*100}%`,background:"var(--accent)"}}/></div>
           </div>
         )}
       </div>
@@ -730,8 +825,8 @@ export default function App(){
           <button className="go" onClick={()=>{Object.keys(cm).forEach(k=>delete cm[k]);ci=0;Object.keys(PR).forEach(k=>delete PR[k]);pc=0;setOn(true);setAi(-1);}}>▶ Play dialogue</button>
           <div style={{display:"flex",justifyContent:"space-between",marginTop:16,fontFamily:"'DM Sans',sans-serif",fontSize:13}}>
             <button className="bb" disabled={sS===0} style={{color:sS>0?"var(--accent)":"var(--border)"}} onClick={()=>setSS(p=>p-1)}>← Prev</button>
-            <button className="bb" disabled={sS===w.sessions.length-1&&sW===7} style={{color:(sS<w.sessions.length-1||sW<7)?"var(--accent)":"var(--border)"}}
-              onClick={()=>{if(sS<w.sessions.length-1)setSS(p=>p+1);else if(sW<7){setSW(p=>p+1);setSS(0);}}}>Next →</button>
+            <button className="bb" disabled={sS===w.sessions.length-1&&sW===W.length-1} style={{color:(sS<w.sessions.length-1||sW<W.length-1)?"var(--accent)":"var(--border)"}}
+              onClick={()=>{if(sS<w.sessions.length-1)setSS(p=>p+1);else if(sW<W.length-1){setSW(p=>p+1);setSS(0);}}}>Next →</button>
           </div>
         </div>
       ):(

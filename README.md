@@ -1,6 +1,6 @@
 # Rafraîchir son français 🇫🇷
 
-8-week French refresher course with 40 pre-built audio dialogues, multi-character voices, and English translations.
+9-week French refresher course with 45 pre-built audio dialogues, multi-character voices, and English translations.
 
 ## Deploy to Vercel
 
@@ -26,7 +26,7 @@ npx vercel
 ```
 
 ## Features
-- 40 sessions across 8 themed weeks
+- 45 sessions across 9 themed weeks (including a dedicated wine & food week)
 - Auto-playing dialogues with character voices (browser TTS)
 - English translation toggle
 - Speed control (normal / slow)
