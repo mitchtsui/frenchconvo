@@ -29,6 +29,7 @@ export function DialoguePlayer({
   onBack,
   onMarkDone,
   onSessionDone,
+  onLineMissed,
   onPrevSession,
   onNextSession,
   onChangeSpeed,
@@ -90,14 +91,15 @@ export function DialoguePlayer({
   }, []);
 
   // Pause-and-resume helper: returns a promise the caller can await; resolves
-  // when the user advances or skips.
+  // with a result object when the user advances or skips. { missed: true }
+  // means the line was skipped or failed (not a clean pass).
   const waitForUser = useCallback(() => {
     setWaitingForUser(true);
     return new Promise((resolve) => {
-      continueResolverRef.current = () => {
+      continueResolverRef.current = (result) => {
         setWaitingForUser(false);
         continueResolverRef.current = null;
-        resolve();
+        resolve(result);
       };
     });
   }, []);
@@ -107,8 +109,15 @@ export function DialoguePlayer({
       if (lines.length === 0) return;
       stopRequested.current = false;
       setIsPlaying(true);
-      for (let i = start; i < lines.length; i++) {
+      // Playback queue of line indices. Missed "À vous" lines are re-inserted
+      // once at the end (guarded so a line can never re-queue more than once).
+      const queue = [];
+      for (let i = start; i < lines.length; i++) queue.push(i);
+      const requeued = new Set();
+
+      for (let qi = 0; qi < queue.length; qi++) {
         if (stopRequested.current) break;
+        const i = queue[qi];
         setActiveIndex(i);
         const line = lines[i];
         const isVous = line.character === "Vous";
@@ -118,8 +127,15 @@ export function DialoguePlayer({
           : getProsody(line.character);
 
         if (isVous && vousMode) {
-          await waitForUser();
+          const result = await waitForUser();
           if (stopRequested.current) break;
+          if (result?.missed) {
+            onLineMissed?.(line);
+            if (!requeued.has(i)) {
+              requeued.add(i);
+              queue.push(i);
+            }
+          }
         } else {
           await speakAs({ text: line.fr, baseRate, prosody });
           if (stopRequested.current) break;
@@ -139,7 +155,7 @@ export function DialoguePlayer({
         }
       }
     },
-    [lines, baseRate, shadowMode, vousMode, waitForUser, done, key, onSessionDone]
+    [lines, baseRate, shadowMode, vousMode, waitForUser, done, key, onSessionDone, onLineMissed]
   );
 
   useMediaSession({
@@ -307,8 +323,8 @@ export function DialoguePlayer({
               {isVousActive && (
                 <SpeakingPrompt
                   target={line.fr}
-                  onPass={() => continueResolverRef.current?.()}
-                  onSkip={() => continueResolverRef.current?.()}
+                  onPass={() => continueResolverRef.current?.({ missed: false })}
+                  onSkip={() => continueResolverRef.current?.({ missed: true })}
                 />
               )}
             </div>

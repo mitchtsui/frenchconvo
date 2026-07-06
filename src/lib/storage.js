@@ -35,5 +35,6 @@ export const KEYS = {
   streak: "streak",
   srs: "srs",
   vocab: "vocab",
-  revealed: "revealedLines",
+  quiz: "quiz",
+  listened: "listened",
 };

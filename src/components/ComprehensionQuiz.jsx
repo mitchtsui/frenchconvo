@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { tap, pulse } from "../lib/haptics.js";
 
-export function ComprehensionQuiz({ questions, onComplete }) {
+export function ComprehensionQuiz({ questions, onComplete, onReview }) {
   const [pos, setPos] = useState(0);
   const [picked, setPicked] = useState(null);
   const [score, setScore] = useState(0);
@@ -15,6 +15,8 @@ export function ComprehensionQuiz({ questions, onComplete }) {
     if (i === q.correctIndex) {
       pulse();
       setScore((s) => s + 1);
+    } else if (q.review) {
+      onReview?.(q.review);
     }
     setTimeout(() => {
       if (pos + 1 < questions.length) {

@@ -32,8 +32,14 @@ export function HomeHeader({ doneCount, streak }) {
           {doneCount}/{totalSessions} terminés
         </span>
         {streak?.count > 0 && (
-          <span aria-label={`Streak ${streak.count} jours`}>
+          <span
+            aria-label={`Streak ${streak.count} jours`}
+            title={streak.best > 0 ? `Record : ${streak.best} jours` : undefined}
+          >
             🔥 {streak.count} {streak.count === 1 ? "jour" : "jours"}
+            {streak.best > streak.count && (
+              <span style={{ color: "var(--muted)" }}> · record {streak.best}</span>
+            )}
           </span>
         )}
       </div>

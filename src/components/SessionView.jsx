@@ -18,7 +18,11 @@ export const SessionView = memo(function SessionView({
   sessionIndex,
   done,
   vocab = {},
+  quizResults = {},
+  listened = {},
   onMarkVocab,
+  onQuizComplete,
+  onReviewCard,
   onToggleDone,
   onSelectSession,
   onPrevSession,
@@ -29,6 +33,9 @@ export const SessionView = memo(function SessionView({
   const session = week.sessions[clampSession(week, sessionIndex)];
   const key = sessionKey(weekIndex, sessionIndex);
   const isDone = !!done[key];
+  const questions = questionsFor(weekIndex, sessionIndex);
+  const quizResult = quizResults[key];
+  const isListened = !!listened[key] && !isDone;
   const isLastInCourse =
     sessionIndex === week.sessions.length - 1 && weekIndex === weeksMeta.length - 1;
 
@@ -163,7 +170,27 @@ export const SessionView = memo(function SessionView({
         onMarkLearning={(w) => onMarkVocab?.(w, "learning")}
       />
 
-      <ComprehensionQuiz questions={questionsFor(weekIndex, sessionIndex)} />
+      {questions.length > 0 && (quizResult || isListened) && (
+        <div
+          style={{
+            marginTop: 12,
+            fontFamily: "'DM Sans',sans-serif",
+            fontSize: 12,
+            color: quizResult ? "var(--accent)" : "var(--muted)",
+          }}
+        >
+          {quizResult
+            ? `✓ Quiz : ${quizResult.score}/${quizResult.total}`
+            : "Session écoutée · terminez le quiz pour valider"}
+        </div>
+      )}
+
+      <ComprehensionQuiz
+        key={key}
+        questions={questions}
+        onComplete={(score, total) => onQuizComplete?.(key, score, total)}
+        onReview={onReviewCard}
+      />
 
       <div
         style={{
