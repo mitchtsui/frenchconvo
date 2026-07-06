@@ -1,9 +1,15 @@
 import { Suspense, lazy, useCallback, useMemo, useState } from "react";
-import { weeks, sessionKey } from "./data/weeks/index.js";
+import { weeks } from "./data/weeks/index.js";
 import { useWeek } from "./hooks/useWeek.js";
 import { usePersistentState } from "./hooks/usePersistentState.js";
 import { KEYS } from "./lib/storage.js";
-import { addPhrasesToDeck, dueCards } from "./lib/srs.js";
+import {
+  addCardsToDeck,
+  dueCards,
+  resolvePhraseCard,
+  resolveVocabCard,
+} from "./lib/srs.js";
+import { questionsFor } from "./data/comprehension.js";
 import { recordActivity, emptyStreak, streakIsLive } from "./lib/streak.js";
 import { stopAll } from "./lib/tts.js";
 import { tap } from "./lib/haptics.js";
@@ -48,6 +54,8 @@ export default function App() {
   const [streak, setStreak] = usePersistentState(KEYS.streak, emptyStreak());
   const [deck, setDeck] = usePersistentState(KEYS.srs, {});
   const [vocab, setVocab] = usePersistentState(KEYS.vocab, {});
+  const [quizResults, setQuizResults] = usePersistentState(KEYS.quiz, {});
+  const [listened, setListened] = usePersistentState(KEYS.listened, {});
 
   const [selectedWeek, setSelectedWeek] = useState(null);
   const [selectedSession, setSelectedSession] = useState(0);
@@ -62,28 +70,119 @@ export default function App() {
 
   const updateSettings = (patch) => setSettings((prev) => ({ ...prev, ...patch }));
 
-  const toggleDone = useCallback(
-    (key) => {
-      setDone((prev) => {
-        const next = { ...prev, [key]: !prev[key] };
-        return next;
-      });
-    },
-    [setDone]
-  );
-
-  const handleSessionDone = useCallback(
-    (key) => {
+  // Fully credit a session: mark done, enqueue its key phrases (with resolved
+  // English + context) into the SRS deck, and record the streak.
+  const finalizeSession = useCallback(
+    (key, session) => {
       setDone((prev) => (prev[key] ? prev : { ...prev, [key]: true }));
-      const [, sIdx] = key.split("-").map(Number);
-      const session = loadedWeek?.sessions[sIdx];
       if (session) {
-        setDeck((prev) => addPhrasesToDeck(prev, session.phrases));
+        const specs = session.phrases.map((p) => resolvePhraseCard(session, p));
+        setDeck((prev) => addCardsToDeck(prev, specs));
       }
       setStreak((prev) => recordActivity(prev));
       setToast(`Bravo · ${session?.phrases.length ?? 0} phrases ajoutées à la révision`);
     },
-    [loadedWeek, setDone, setDeck, setStreak]
+    [setDone, setDeck, setStreak]
+  );
+
+  // Manual toggle: un-marking just clears the flag; marking done gives full
+  // credit (phrase enqueue + streak) so "done" always means "phrases enqueued".
+  const toggleDone = useCallback(
+    (key) => {
+      if (done[key]) {
+        setDone((prev) => ({ ...prev, [key]: false }));
+        return;
+      }
+      const [, sIdx] = key.split("-").map(Number);
+      finalizeSession(key, loadedWeek?.sessions[sIdx] ?? null);
+    },
+    [done, loadedWeek, setDone, finalizeSession]
+  );
+
+  // Playback finished. If the session has a comprehension quiz that has never
+  // been completed, this only counts as "listened" — the learner must do the
+  // quiz to fully validate the session.
+  const handleSessionDone = useCallback(
+    (key) => {
+      const [wIdx, sIdx] = key.split("-").map(Number);
+      const session = loadedWeek?.sessions[sIdx];
+      const hasQuiz = questionsFor(wIdx, sIdx).length > 0;
+      if (hasQuiz && !quizResults[key]) {
+        setListened((prev) => (prev[key] ? prev : { ...prev, [key]: true }));
+        setToast("Session écoutée · faites le quiz pour valider");
+        return;
+      }
+      finalizeSession(key, session);
+    },
+    [loadedWeek, quizResults, setListened, finalizeSession]
+  );
+
+  // Quiz finished (any score). Persist the result and, if playback already
+  // happened, finalize the session now.
+  const handleQuizComplete = useCallback(
+    (key, score, total) => {
+      setQuizResults((prev) => ({ ...prev, [key]: { score, total, ts: Date.now() } }));
+      if (listened[key] && !done[key]) {
+        const [, sIdx] = key.split("-").map(Number);
+        finalizeSession(key, loadedWeek?.sessions[sIdx]);
+      }
+    },
+    [listened, done, loadedWeek, setQuizResults, finalizeSession]
+  );
+
+  // A missed quiz answer that carries a review line enqueues it as a card.
+  const handleReviewCard = useCallback(
+    (reviewItem) => {
+      if (!reviewItem?.fr) return;
+      setDeck((prev) =>
+        addCardsToDeck(prev, [
+          {
+            id: reviewItem.fr,
+            fr: reviewItem.fr,
+            en: reviewItem.en ?? null,
+            contextEn: reviewItem.en ?? null,
+            kind: "line",
+          },
+        ])
+      );
+    },
+    [setDeck]
+  );
+
+  // A skipped or failed "À vous" line is enqueued for review, due in ~10 min.
+  const handleLineMissed = useCallback(
+    (line) => {
+      if (!line?.fr) return;
+      setDeck((prev) =>
+        addCardsToDeck(
+          prev,
+          [{ id: line.fr, fr: line.fr, en: line.en ?? null, contextEn: line.en ?? null, kind: "line" }],
+          Date.now() + 10 * 60 * 1000
+        )
+      );
+    },
+    [setDeck]
+  );
+
+  // Marking a word: cosmetic vocab map + SRS side effects.
+  const handleMarkVocab = useCallback(
+    (word, status) => {
+      setVocab((prev) => ({ ...prev, [word]: status }));
+      const session = loadedWeek?.sessions[selectedSession];
+      if (!session) return;
+      if (status === "learning") {
+        setDeck((prev) => addCardsToDeck(prev, [resolveVocabCard(session, word)]));
+      } else if (status === "known") {
+        setDeck((prev) => {
+          const id = `vocab:${word}`;
+          if (!prev[id]) return prev;
+          const next = { ...prev };
+          delete next[id];
+          return next;
+        });
+      }
+    },
+    [loadedWeek, selectedSession, setVocab, setDeck]
   );
 
   const openSession = (weekIdx, sessionIdx = 0) => {
@@ -166,6 +265,7 @@ export default function App() {
             toggleDone(key);
           }}
           onSessionDone={handleSessionDone}
+          onLineMissed={handleLineMissed}
           onPrevSession={onPrevSession}
           onNextSession={onNextSession}
           onChangeSpeed={cycleSpeed}
@@ -214,7 +314,11 @@ export default function App() {
           done={done}
           baseRate={baseRate}
           vocab={vocab}
-          onMarkVocab={(w, status) => setVocab((prev) => ({ ...prev, [w]: status }))}
+          quizResults={quizResults}
+          listened={listened}
+          onMarkVocab={handleMarkVocab}
+          onQuizComplete={handleQuizComplete}
+          onReviewCard={handleReviewCard}
           onToggleDone={toggleDone}
           onSelectSession={setSelectedSession}
           onPrevSession={onPrevSession}
@@ -243,7 +347,7 @@ export default function App() {
             style={{ marginTop: 14 }}
             onClick={() => setView("review")}
           >
-            🌱 Réviser {dueCount} {dueCount === 1 ? "phrase" : "phrases"}
+            🌱 Réviser {dueCount} {dueCount === 1 ? "carte" : "cartes"}
           </button>
         )}
       </div>

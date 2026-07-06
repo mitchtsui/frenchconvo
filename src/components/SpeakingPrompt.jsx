@@ -1,7 +1,19 @@
 import { useEffect, useRef, useState } from "react";
 import { isSpeechRecognitionAvailable, recognizeFrench } from "../lib/speechRecognition.js";
-import { isMatch, similarity } from "../lib/speechMatch.js";
+import { isMatch, similarity, normalizeFrench } from "../lib/speechMatch.js";
 import { pulse, tap } from "../lib/haptics.js";
+
+// Word-level diff: split the target into tokens and flag each one the learner
+// did not say (normalized word-set membership). No phoneme analysis.
+function wordDiff(target, transcript) {
+  const said = new Set(normalizeFrench(transcript).split(" ").filter(Boolean));
+  return target.split(/(\s+)/).map((part) => {
+    // Contractions normalize to multiple tokens ("c'est" → "c est"): the part
+    // counts as said only if every sub-token was said.
+    const tokens = normalizeFrench(part).split(" ").filter(Boolean);
+    return { part, ok: tokens.every((t) => said.has(t)) };
+  });
+}
 
 export function SpeakingPrompt({ target, onPass, onSkip, autoStart = true }) {
   const [status, setStatus] = useState("idle");
@@ -66,7 +78,27 @@ export function SpeakingPrompt({ target, onPass, onSkip, autoStart = true }) {
       >
         🎤 À vous — dites cette phrase
       </div>
-      <div style={{ fontSize: 14, marginBottom: 8 }}>{target}</div>
+      <div style={{ fontSize: 14, marginBottom: 8 }}>
+        {status === "fail" && transcript
+          ? wordDiff(target, transcript).map((w, i) =>
+              w.ok ? (
+                <span key={i}>{w.part}</span>
+              ) : (
+                <span
+                  key={i}
+                  style={{
+                    color: "var(--error)",
+                    textDecoration: "underline",
+                    textDecorationStyle: "wavy",
+                    fontWeight: 700,
+                  }}
+                >
+                  {w.part}
+                </span>
+              )
+            )
+          : target}
+      </div>
       <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
         <button
           className="chip"
